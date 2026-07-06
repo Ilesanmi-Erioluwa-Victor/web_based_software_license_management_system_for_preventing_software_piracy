@@ -1,0 +1,19 @@
+{
+    "name": "license-manager/app",
+    "description": "Web-Based Software License Management System",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "vlucas/phpdotenv": "^5.6",
+        "mongodb/mongodb": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "scripts": {
+        "start": "php -S 0.0.0.0:8000 -t public",
+        "serve": "php -S 0.0.0.0:8000 -t public"
+    }
+}

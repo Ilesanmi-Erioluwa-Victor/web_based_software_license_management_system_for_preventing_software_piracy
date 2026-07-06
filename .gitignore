@@ -1,0 +1,23 @@
+# PHP
+vendor/
+
+# Node
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Tailwind
+public/css/output.css
+
+# Logs
+*.log

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: license-manager
+    runtime: image
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_URI
+        sync: false
+      - key: DB_DATABASE
+        value: license_manager
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_FROM
+        value: noreply@license-manager.com
+      - key: BREVO_FROM_NAME
+        value: License Manager
+      - key: APP_URL
+        value: https://license-manager.onrender.com
+      - key: SESSION_LIFETIME
+        value: "86400"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
