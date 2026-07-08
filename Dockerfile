@@ -1,9 +1,9 @@
 # Stage 1: Build frontend assets
 FROM node:20-alpine AS frontend-builder
 WORKDIR /build
-COPY package.json tailwind.config.js ./
+COPY package.json package-lock.json tailwind.config.js ./
 COPY public/css/input.css ./public/css/input.css
-RUN npm ci && npm run build:css
+RUN npm install && npm run build:css
 
 # Stage 2: PHP runtime
 FROM php:8.2-cli
