@@ -15,11 +15,11 @@ class CustomerPortalController
         $page = (int) ($_GET['page'] ?? 1);
         $perPage = (int) ($_GET['per_page'] ?? 20);
 
-        $result = License::findAll(
-            ['search' => $session['email']],
-            $page,
-            $perPage
-        );
+        $filter = [
+            'customer_email' => $session['email'],
+        ];
+
+        $result = License::findAll($filter, $page, $perPage);
 
         $items = array_map(function ($license) {
             $license['activations'] = Activation::findByLicense($license['id']);

@@ -87,6 +87,9 @@ class License
         if (!empty($filters['license_type'])) {
             $filter['license_type'] = $filters['license_type'];
         }
+        if (!empty($filters['customer_email'])) {
+            $filter['customer_email'] = $filters['customer_email'];
+        }
         if (!empty($filters['search'])) {
             $s = $filters['search'];
             $filter['$or'] = [
