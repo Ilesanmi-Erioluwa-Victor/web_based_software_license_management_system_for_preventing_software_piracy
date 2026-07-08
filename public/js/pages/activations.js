@@ -29,7 +29,9 @@ const ActivationsPage = {
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Machine Name</label>
                                             <input type="text" name="machine_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
                                         </div>
-                                        <button type="submit" class="w-full py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition">Activate</button>
+                                        <button id="activate-btn" type="submit" class="w-full py-2.5 px-4 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                                            Activate
+                                        </button>
                                         <div id="activate-result"></div>
                                     </form>
                                 </div>
@@ -45,7 +47,9 @@ const ActivationsPage = {
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Hardware ID</label>
                                             <input type="text" name="hardware_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-mono" />
                                         </div>
-                                        <button type="submit" class="w-full py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition">Deactivate</button>
+                                        <button id="deactivate-btn" type="submit" class="w-full py-2.5 px-4 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                                            Deactivate
+                                        </button>
                                         <div id="deactivate-result"></div>
                                     </form>
                                 </div>
@@ -59,29 +63,47 @@ const ActivationsPage = {
         document.getElementById('activate-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
+            const btn = document.getElementById('activate-btn');
+            const resultEl = document.getElementById('activate-result');
+            resultEl.innerHTML = '';
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> Activating...';
             try {
                 const res = await api.post('/api/activations/activate', {
                     license_key: form.license_key.value,
                     hardware_id: form.hardware_id.value,
                     machine_name: form.machine_name.value || null,
                 });
-                document.getElementById('activate-result').innerHTML = `<div class="p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium">✅ ${res.message}</div>`;
+                resultEl.innerHTML = `<div class="p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium">✅ ${res.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Activate';
             } catch (err) {
-                document.getElementById('activate-result').innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded-lg text-sm font-medium">❌ ${err.message}</div>`;
+                resultEl.innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded-lg text-sm font-medium">❌ ${err.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Activate';
             }
         });
 
         document.getElementById('deactivate-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
+            const btn = document.getElementById('deactivate-btn');
+            const resultEl = document.getElementById('deactivate-result');
+            resultEl.innerHTML = '';
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> Deactivating...';
             try {
                 const res = await api.post('/api/activations/deactivate', {
                     license_key: form.license_key.value,
                     hardware_id: form.hardware_id.value,
                 });
-                document.getElementById('deactivate-result').innerHTML = `<div class="p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium">✅ ${res.message}</div>`;
+                resultEl.innerHTML = `<div class="p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium">✅ ${res.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Deactivate';
             } catch (err) {
-                document.getElementById('deactivate-result').innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded-lg text-sm font-medium">❌ ${err.message}</div>`;
+                resultEl.innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded-lg text-sm font-medium">❌ ${err.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Deactivate';
             }
         });
     }

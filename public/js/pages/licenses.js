@@ -226,6 +226,9 @@ const LicensesPage = {
                     <label class="block text-sm font-medium text-gray-700 mb-1">Machine Name</label>
                     <input type="text" name="machine_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="My Workstation" />
                 </div>
+                <button id="validate-btn" type="submit" class="w-full py-2.5 px-4 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                    Validate
+                </button>
                 <div id="validate-result"></div>
             </form>
         `);
@@ -233,7 +236,11 @@ const LicensesPage = {
         document.querySelector('#validate-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
+            const btn = document.getElementById('validate-btn');
             const resultEl = document.getElementById('validate-result');
+            resultEl.innerHTML = '';
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> Validating...';
             try {
                 const res = await api.post('/api/licenses/validate', {
                     license_key: form.license_key.value,
@@ -241,8 +248,12 @@ const LicensesPage = {
                     machine_name: form.machine_name.value || null,
                 });
                 resultEl.innerHTML = `<div class="p-3 bg-green-50 text-green-700 rounded-lg border border-green-200 text-sm font-medium">✅ License is valid!</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Validate';
             } catch (err) {
                 resultEl.innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded-lg border border-red-200 text-sm font-medium">❌ ${err.message}</div>`;
+                btn.disabled = false;
+                btn.innerHTML = 'Validate';
             }
         });
     },

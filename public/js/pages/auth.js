@@ -15,7 +15,7 @@ const AuthPage = {
 
                         <div id="name-field" class="${isRegister ? '' : 'hidden'}">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" name="full_name" required
+                            <input type="text" name="full_name" ${isRegister ? 'required' : ''}
                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
                                    placeholder="John Doe" />
                         </div>
@@ -41,7 +41,7 @@ const AuthPage = {
                                    placeholder="Min. 8 characters" minlength="8" />
                         </div>
 
-                        <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition">
+                        <button id="auth-submit-btn" type="submit" class="w-full py-2.5 px-4 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
                             ${isRegister ? 'Create Account' : 'Sign In'}
                         </button>
                     </form>
@@ -58,8 +58,12 @@ const AuthPage = {
         document.getElementById('auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const form = e.target;
+            const btn = document.getElementById('auth-submit-btn');
             const errorEl = document.getElementById('form-error');
             errorEl.classList.add('hidden');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> Processing...';
 
             const data = {
                 email: form.email.value,
@@ -79,6 +83,8 @@ const AuthPage = {
                     Router.initApp();
                 }
             } catch (err) {
+                btn.disabled = false;
+                btn.innerHTML = isRegister ? 'Create Account' : 'Sign In';
                 errorEl.textContent = err.message || 'An error occurred';
                 errorEl.classList.remove('hidden');
             }
