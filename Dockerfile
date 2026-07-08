@@ -2,7 +2,7 @@
 FROM node:20-alpine AS frontend-builder
 WORKDIR /build
 COPY package.json package-lock.json tailwind.config.js ./
-COPY public/css/input.css ./public/css/input.css
+COPY public ./public
 RUN npm install && npm run build:css
 
 # Stage 2: PHP runtime
