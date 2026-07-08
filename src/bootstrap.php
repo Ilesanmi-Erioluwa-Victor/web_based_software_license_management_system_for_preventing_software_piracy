@@ -12,11 +12,12 @@ ini_set('log_errors', '1');
 set_exception_handler(function (\Throwable $e) {
     http_response_code(500);
     header('Content-Type: application/json');
-    $debug = ($_ENV['APP_ENV'] ?? 'production') === 'development' ? $e->getMessage() : null;
     echo json_encode([
         'success' => false,
         'message' => 'Internal server error',
-        'debug' => $debug,
+        'debug' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
     ]);
     exit;
 });
