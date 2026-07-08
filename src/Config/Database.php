@@ -127,12 +127,14 @@ class Database
     {
         $converted = [];
         foreach ($filter as $key => $value) {
-            if ($key === '_id' && is_string($value)) {
-                $converted[$key] = new ObjectId($value);
-            } elseif (in_array($key, ['user_id', 'product_id', 'publisher_id', 'template_id', 'license_id', 'actor_id']) && is_string($value)) {
-                try {
-                    $converted[$key] = new ObjectId($value);
-                } catch (\Exception $e) {
+            if (is_string($value) && strlen($value) === 24 && ctype_xdigit($value)) {
+                if ($key === '_id' || in_array($key, ['user_id', 'product_id', 'publisher_id', 'template_id', 'license_id', 'actor_id'])) {
+                    try {
+                        $converted[$key] = new ObjectId($value);
+                    } catch (\Exception $e) {
+                        $converted[$key] = $value;
+                    }
+                } else {
                     $converted[$key] = $value;
                 }
             } elseif (is_array($value)) {

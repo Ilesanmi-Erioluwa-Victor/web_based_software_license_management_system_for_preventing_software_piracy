@@ -47,6 +47,10 @@ class LicenseController
         }
 
         $product = Product::findById($license['product_id']);
+        if (!$product) {
+            Response::error('Product not found', 404);
+        }
+
         if ($session['role'] !== 'admin' && $product['publisher_id'] !== $session['user_id']) {
             Response::error('Forbidden', 403);
         }
