@@ -15,9 +15,6 @@ set_exception_handler(function (\Throwable $e) {
     echo json_encode([
         'success' => false,
         'message' => 'Internal server error',
-        'debug' => $e->getMessage(),
-        'file' => $e->getFile(),
-        'line' => $e->getLine(),
     ]);
     exit;
 });
@@ -50,7 +47,7 @@ foreach ($routes as $route) {
         $matched = true;
         $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
-        if (is_callable($handler)) {
+        if ($handler instanceof \Closure) {
             $handler();
         } else {
             [$controller, $action] = $handler;
